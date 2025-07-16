@@ -15,8 +15,6 @@ RUN mkdir -p /home/node/.n8n/nodes && \
         @telepilotco/n8n-nodes-telepilot && \
     chown -R node:node /home/node/.n8n/nodes
 
-# ✅ CRITICAL: Let n8n know where to load the nodes
-ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
