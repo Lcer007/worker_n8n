@@ -1,22 +1,16 @@
-FROM docker.n8n.io/n8nio/n8n:latest
+FROM node:18
 
-USER root
+# Install n8n CLI and Telepilot globally
+RUN npm install -g n8n \
+    @telepilotco/n8n-nodes-telepilot \
+    @telepilotco/tdl \
+    @telepilotco/tdlib-binaries-prebuilt
 
-RUN apk update && \
-    apk add --no-cache python3 py3-pip && \
-    ln -sf python3 /usr/bin/python
+# Use the global node_modules path for loading custom nodes
+ENV N8N_CUSTOM_EXTENSIONS=/usr/local/lib/node_modules
 
-# Install custom nodes
-RUN mkdir -p /home/node/.n8n/nodes && \
-    cd /home/node/.n8n/nodes && \
-    npm install \
-        @telepilotco/tdl \
-        @telepilotco/tdlib-binaries-prebuilt \
-        @telepilotco/n8n-nodes-telepilot && \
-    chown -R node:node /home/node/.n8n/nodes
+# Working directory for n8n
+WORKDIR /data
 
-
-USER node
-
-# ✅ Use this so Railway doesn't mess up the entrypoint
-ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
+# Start the worker
+CMD ["n8n", "worker"]
