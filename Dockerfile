@@ -6,6 +6,7 @@ RUN apk update && \
     apk add --no-cache python3 py3-pip && \
     ln -sf python3 /usr/bin/python
 
+# Install custom nodes
 RUN mkdir -p /home/node/.n8n/nodes && \
     cd /home/node/.n8n/nodes && \
     npm install \
@@ -14,9 +15,10 @@ RUN mkdir -p /home/node/.n8n/nodes && \
         @telepilotco/n8n-nodes-telepilot && \
     chown -R node:node /home/node/.n8n/nodes
 
+# ✅ CRITICAL: Let n8n know where to load the nodes
 ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-# 🔥 Explicitly run the n8n worker via full node path
+# ✅ Use this so Railway doesn't mess up the entrypoint
 ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
