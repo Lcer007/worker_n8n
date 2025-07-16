@@ -1,11 +1,24 @@
-FROM node:18
+FROM docker.n8n.io/n8nio/n8n:latest
 
-# Install n8n and Telepilot nodes globally
-RUN npm install -g n8n @telepilotco/n8n-nodes-telepilot
+USER root
 
-#RUN apt-get update && apt-get install -y libtdjson-dev
+# Install Python (required by some dependencies)
+RUN apk update && \
+    apk add --no-cache python3 py3-pip && \
+    ln -sf python3 /usr/bin/python
 
-WORKDIR /data
+# Install Telepilot dependencies in n8n's custom node path
+RUN mkdir -p /home/node/.n8n/nodes && \
+    cd /home/node/.n8n/nodes && \
+    npm i @telepilotco/tdl \
+           @telepilotco/tdlib-binaries-prebuilt \
+           @telepilotco/n8n-nodes-telepilot && \
+    chown -R node:node /home/node/.n8n/nodes 
 
-# Start n8n in worker mode
+# Ensure correct ENV for custom node loading
+ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes
+
+USER node
+
+# Run in worker mode only
 CMD ["n8n", "worker"]
