@@ -1,16 +1,22 @@
-FROM node:18
+FROM docker.n8n.io/n8nio/n8n:1.102.3
 
-# Install n8n CLI and Telepilot globally
-RUN npm install -g n8n \
-    @telepilotco/n8n-nodes-telepilot \
-    @telepilotco/tdl \
-    @telepilotco/tdlib-binaries-prebuilt
+USER root
 
-# Use the global node_modules path for loading custom nodes
-ENV N8N_CUSTOM_EXTENSIONS=/usr/local/lib/node_modules
+RUN apk update && \
+    apk add --no-cache python3 py3-pip && \
+    ln -sf python3 /usr/bin/python
 
-# Working directory for n8n
-WORKDIR /data
+RUN mkdir -p /home/node/.n8n/nodes && \
+    cd /home/node/.n8n/nodes && \
+    npm install \
+      @telepilotco/tdl \
+      @telepilotco/tdlib-binaries-prebuilt \
+      @telepilotco/n8n-nodes-telepilot && \
+    chown -R node:node /home/node/.n8n/nodes
 
-# Start the worker
-CMD ["n8n", "worker"]
+ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
+
+USER node
+
+# Force entrypoint for Railway
+ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
