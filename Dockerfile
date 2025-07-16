@@ -15,10 +15,10 @@ RUN mkdir -p /home/node/.n8n/nodes && \
     chown -R node:node /home/node/.n8n/nodes
 
 ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
+RUN ls -la /home/node/.n8n/nodes/node_modules/@telepilotco/n8n-nodes-telepilot
 
 USER node
 
 # Force entrypoint for Railway
 ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
 
-RUN echo 'console.log("🧪 Checking if Telepilot node exists:", require("@telepilotco/n8n-nodes-telepilot"));' >> /usr/local/lib/node_modules/n8n/packages/cli/src/cli.ts
