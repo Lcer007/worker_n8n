@@ -3,21 +3,21 @@ FROM node:18
 # Install n8n CLI globally
 RUN npm install -g n8n
 
-# Create folder for custom nodes
+# Create a folder for custom extensions
 RUN mkdir -p /data/custom-nodes
 WORKDIR /data/custom-nodes
 
-# Install Telepilot + TDLib nodes
+# Install Telepilot and dependencies
 RUN npm install \
-    @telepilotco/tdl \
+    @telepilotco/n8n-nodes-telepilot \
     @telepilotco/tdlib-binaries-prebuilt \
-    @telepilotco/n8n-nodes-telepilot
+    @telepilotco/tdl
 
-# Set custom extension path
+# Set custom extensions path
 ENV N8N_CUSTOM_EXTENSIONS=/data/custom-nodes/node_modules
 
-# Use a working directory for workflows
+# Switch to working directory for n8n
 WORKDIR /data
 
-# Start worker
+# Start the n8n worker
 CMD ["n8n", "worker"]
