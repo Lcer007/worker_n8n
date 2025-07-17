@@ -14,7 +14,9 @@ RUN mkdir -p /home/node/.n8n/nodes && \
 
 ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
+# Add binary path explicitly (Railway may strip it)
+ENV PATH="/usr/local/bin:${PATH}"
+
 USER node
 
-CMD ["/usr/local/bin/n8n", "worker"]
-
+CMD ["n8n", "worker"]
