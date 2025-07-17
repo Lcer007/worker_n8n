@@ -26,4 +26,6 @@ USER node
 CMD ["n8n", "worker"]
 
 RUN echo "n8n path:" $(which n8n)
+RUN echo "Checking n8n location..." && ls -la /usr/local/bin/n8n
+RUN echo "Testing n8n call..." && n8n version
 
