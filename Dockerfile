@@ -18,5 +18,5 @@ ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-# ✅ RUN WORKER MODE
 ENTRYPOINT ["n8n", "worker"]
+
