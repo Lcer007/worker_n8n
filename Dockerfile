@@ -18,5 +18,5 @@ ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n"]
-CMD ["worker"]
+# 🧠 This runs the worker directly using full path via node
+ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
