@@ -18,5 +18,5 @@ ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-CMD ["n8n", "worker"]
-
+ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n"]
+CMD ["worker"]
