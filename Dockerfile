@@ -1,4 +1,4 @@
-FROM docker.n8n.io/n8nio/n8n:1.102.3
+FROM n8nio/n8n:1.102.3
 
 USER root
 
@@ -18,5 +18,5 @@ ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-# 🧠 This runs the worker directly using full path via node
-ENTRYPOINT ["node", "/usr/local/lib/node_modules/n8n/bin/n8n", "worker"]
+# ✅ RUN WORKER MODE
+ENTRYPOINT ["n8n", "worker"]
