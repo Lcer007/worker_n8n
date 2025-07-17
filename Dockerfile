@@ -16,6 +16,5 @@ ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
 USER node
 
-CMD ["n8n", "worker"]
+CMD ["/usr/local/bin/n8n", "worker"]
 
-RUN which n8n
