@@ -2,30 +2,25 @@ FROM docker.n8n.io/n8nio/n8n:1.102.3
 
 USER root
 
-# Install Python for tdlib dependencies
-RUN apk update && \
-    apk add --no-cache python3 py3-pip && \
+# Install Python
+RUN apk add --no-cache python3 py3-pip && \
     ln -sf python3 /usr/bin/python
 
-# Install Telepilot Community Nodes
+# Install Telepilot dependencies
 RUN mkdir -p /home/node/.n8n/nodes && \
     cd /home/node/.n8n/nodes && \
     npm install \
       @telepilotco/tdl \
       @telepilotco/tdlib-binaries-prebuilt \
       @telepilotco/n8n-nodes-telepilot && \
-    chown -R node:node /home/node/.n8n/nodes
+    chown -R node:node /home/node/.n8n
 
-# Set custom node path env variable
+# Register custom nodes
 ENV N8N_CUSTOM_EXTENSIONS=/home/node/.n8n/nodes/node_modules
 
-# Switch to node user (important for n8n to run properly)
 USER node
 
-# ✅ Final: Use CMD for Railway compatibility
+# ENTRYPOINT must be n8n
 CMD ["n8n", "worker"]
 
-RUN echo "n8n path:" $(which n8n)
-RUN echo "Checking n8n location..." && ls -la /usr/local/bin/n8n
-RUN echo "Testing n8n call..." && n8n version
 
